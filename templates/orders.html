@@ -1,0 +1,80 @@
+{% extends "layout.html" %}
+
+{% block title %}Sales & Orders{% endblock %}
+
+{% block content %}
+<div style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem;">
+
+    <!-- New Order Form -->
+    <div>
+        <h2 class="section-title">Create New Order</h2>
+        <div class="card">
+            <form action="/create_order" method="POST">
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; color: var(--text-secondary);">Customer</label>
+                    <select name="customer_id" required
+                        style="width: 100%; padding: 0.75rem; background: var(--bg-dark); color: white; border: 1px solid var(--border); border-radius: 8px;">
+                        {% for c in customers %}
+                        <option value="{{ c.id }}">{{ c.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; color: var(--text-secondary);">Product</label>
+                    <select name="product_id" required
+                        style="width: 100%; padding: 0.75rem; background: var(--bg-dark); color: white; border: 1px solid var(--border); border-radius: 8px;">
+                        {% for p in products %}
+                        <option value="{{ p.id }}">{{ p.name }} (${{ "%.2f"|format(p.price) }}) - Stock: {{
+                            p.stock_quantity }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; color: var(--text-secondary);">Quantity</label>
+                    <input type="number" name="quantity" min="1" value="1" required
+                        style="width: 100%; padding: 0.75rem; background: var(--bg-dark); color: white; border: 1px solid var(--border); border-radius: 8px;">
+                </div>
+
+                <button type="submit" class="btn-primary" style="width: 100%;">Complete Sale</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Order History -->
+    <div>
+        <h2 class="section-title">Order History</h2>
+        <div class="card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Date</th>
+                        <th>Customer</th>
+                        <th class="text-right">Total</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                    <tr>
+                        <td>#{{ order.id }}</td>
+                        <td style="color: var(--text-secondary); font-size: 0.85rem;">{{ order.order_date }}</td>
+                        <td>{{ order.customer_name }}</td>
+                        <td class="text-right" style="font-weight: 600;">${{ "%.2f"|format(order.total_amount) }}</td>
+                        <td>
+                            <span class="badge 
+                                {% if order.status == 'Completed' %}success
+                                {% else %}warning{% endif %}">
+                                {{ order.status }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

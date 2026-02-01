@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retail-Buddy | The Future of Retail</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700;900&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            overflow: auto;
+            /* Allow scrolling on landing */
+        }
+
+        .hero-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .hero-title {
+            font-size: 5rem;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 30px rgba(217, 70, 239, 0.3));
+            animation: fadeIn 1s ease-out;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin-bottom: 3rem;
+            animation: fadeIn 1s ease-out 0.2s backwards;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            animation: fadeIn 1s ease-out 0.4s backwards;
+        }
+
+        .btn-large {
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            border-radius: 50px;
+        }
+
+        /* Floating Cards Animation */
+        .floating-card {
+            position: absolute;
+            width: 200px;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            z-index: -1;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .c1 {
+            top: 15%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .c2 {
+            top: 20%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+
+        .c3 {
+            bottom: 15%;
+            left: 15%;
+            animation-delay: 1s;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="hero-container">
+        <!-- Decorative Floating Cards -->
+        <div class="floating-card c1">
+            <h4 style="color: var(--primary);">Growth</h4>
+            <div style="font-size: 1.5rem; font-weight: 700;">+125%</div>
+        </div>
+        <div class="floating-card c2">
+            <h4 style="color: var(--accent);">Inventory</h4>
+            <div style="font-size: 1.5rem; font-weight: 700;">Optimized</div>
+        </div>
+        <div class="floating-card c3">
+            <h4 style="color: var(--secondary);">Sales</h4>
+            <div style="font-size: 1.5rem; font-weight: 700;">Booming</div>
+        </div>
+
+        <h1 class="hero-title">Rule Your Retail<br><span style="color: var(--primary);">Like a Boss.</span></h1>
+        <p class="hero-subtitle">The ERP that doesn't look like an ERP. Manage inventory, customers, and sales with
+            style.</p>
+
+        <div class="cta-buttons">
+            {% if session.get('user_id') %}
+            <a href="{{ url_for('dashboard') }}" class="btn-primary btn-large">Go to Dashboard</a>
+            {% else %}
+            <a href="{{ url_for('login') }}" class="btn-primary btn-large">Login</a>
+            <a href="{{ url_for('signup') }}" class="btn-secondary btn-large">Get Started</a>
+            {% endif %}
+        </div>
+    </div>
+
+</body>
+
+</html>

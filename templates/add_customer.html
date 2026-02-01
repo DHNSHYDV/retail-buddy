@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+
+{% block title %}Add New Customer{% endblock %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 0 auto;">
+    <h2 class="section-title">Add New Customer</h2>
+
+    <div class="card">
+        {% if error %}
+        <div
+            style="background: rgba(248, 113, 113, 0.1); color: var(--danger); padding: 0.75rem; border-radius: 8px; margin-bottom: 1.5rem;">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        <form method="POST" action="{{ url_for('add_customer') }}">
+            <div class="form-group">
+                <label>Customer Name</label>
+                <input type="text" name="name" class="form-input" required placeholder="e.g. John Doe">
+            </div>
+
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" name="email" class="form-input" required placeholder="e.g. john@example.com">
+            </div>
+
+            <div class="form-group">
+                <label>Phone Number</label>
+                <input type="tel" name="phone" class="form-input" placeholder="e.g. +1 555 123 4567">
+            </div>
+
+            <div class="form-group">
+                <label>Status</label>
+                <select name="status" class="form-input">
+                    <option value="New">New</option>
+                    <option value="Active">Active</option>
+                    <option value="VIP">VIP</option>
+                </select>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 1.5rem;">
+                <a href="{{ url_for('customers') }}" class="btn-secondary"
+                    style="text-decoration: none; padding: 0.75rem 1.5rem; display: inline-block;">Cancel</a>
+                <button type="submit" class="btn-primary">Save Customer</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

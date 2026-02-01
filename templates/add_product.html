@@ -1,0 +1,77 @@
+{% extends "layout.html" %}
+
+{% block title %}Add New Product{% endblock %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 0 auto;">
+    <h2 class="section-title">Add New Product</h2>
+
+    <div class="card">
+        {% if error %}
+        <div
+            style="background: rgba(248, 113, 113, 0.1); color: var(--danger); padding: 0.75rem; border-radius: 8px; margin-bottom: 1.5rem;">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        <form method="POST" action="{{ url_for('add_product') }}">
+            <div class="form-group">
+                <label>Product Name</label>
+                <input type="text" name="name" class="form-input" required placeholder="e.g. Wireless Mouse">
+            </div>
+
+            <div class="form-group">
+                <label>SKU (Stock Keeping Unit)</label>
+                <input type="text" name="sku" class="form-input" required placeholder="e.g. TECH-001">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                    <label>Category</label>
+                    <select name="category_id" class="form-input">
+                        <option value="">-- Select Category --</option>
+                        {% for category in categories %}
+                        <option value="{{ category.id }}">{{ category.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Supplier</label>
+                    <select name="supplier_id" class="form-input">
+                        <option value="">-- Select Supplier --</option>
+                        {% for supplier in suppliers %}
+                        <option value="{{ supplier.id }}">{{ supplier.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                    <label>Price ($)</label>
+                    <input type="number" name="price" class="form-input" step="0.01" min="0" required
+                        placeholder="0.00">
+                </div>
+
+                <div class="form-group">
+                    <label>Initial Stock</label>
+                    <input type="number" name="stock_quantity" class="form-input" min="0" required value="0">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Description</label>
+                <textarea name="description" class="form-input" rows="3"
+                    placeholder="Optional product description..."></textarea>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 1.5rem;">
+                <a href="{{ url_for('products') }}" class="btn-secondary"
+                    style="text-decoration: none; padding: 0.75rem 1.5rem; display: inline-block;">Cancel</a>
+                <button type="submit" class="btn-primary">Save Product</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

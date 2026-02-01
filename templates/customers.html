@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+
+{% block title %}Customers{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h2 class="section-title" style="margin-bottom: 0;">Customer Database</h2>
+        <a href="{{ url_for('add_customer') }}" class="btn-primary" style="text-decoration: none;">Add Customer</a>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Status</th>
+                <th>Joined</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cust in customers %}
+            <tr>
+                <td>#{{ cust.id }}</td>
+                <td style="font-weight: 600;">{{ cust.name }}</td>
+                <td>{{ cust.email }}</td>
+                <td>{{ cust.phone }}</td>
+                <td>
+                    <span class="badge 
+                        {% if cust.status == 'VIP' %}success
+                        {% elif cust.status == 'Active' %}neutral
+                        {% else %}warning{% endif %}">
+                        {{ cust.status }}
+                    </span>
+                </td>
+                <td style="color: var(--text-secondary); font-size: 0.9rem;">
+                    {{ cust.joined_date }}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

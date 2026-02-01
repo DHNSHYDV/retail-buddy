@@ -1,0 +1,68 @@
+{% extends "layout.html" %}
+
+{% block title %}Management Hub{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2 class="section-title">Management Hub</h2>
+    <p style="color: var(--text-secondary); margin-bottom: 2rem;">Manage your product categories and suppliers here.</p>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+
+        <!-- Categories Column -->
+        <div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h3 style="margin-bottom: 0; color: var(--primary);">Categories</h3>
+            </div>
+
+            <form method="POST" action="{{ url_for('add_category') }}"
+                style="margin-bottom: 2rem; background: rgba(0,0,0,0.2); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--glass-border);">
+                <div class="form-group">
+                    <label>New Category Name</label>
+                    <input type="text" name="name" class="form-input" required placeholder="e.g. Gaming Gear">
+                </div>
+                <button type="submit" class="btn-primary" style="width: 100%;">Add Category</button>
+            </form>
+
+            <ul style="list-style: none;">
+                {% for category in categories %}
+                <li
+                    style="padding: 1rem; border-bottom: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-weight: 500;">{{ category.name }}</span>
+                    <span style="font-size: 0.8rem; color: var(--text-secondary);">ID: {{ category.id }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Suppliers Column -->
+        <div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h3 style="margin-bottom: 0; color: var(--accent);">Suppliers</h3>
+            </div>
+
+            <form method="POST" action="{{ url_for('add_supplier') }}"
+                style="margin-bottom: 2rem; background: rgba(0,0,0,0.2); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--glass-border);">
+                <div class="form-group">
+                    <label>New Supplier Name</label>
+                    <input type="text" name="name" class="form-input" required placeholder="e.g. Global Tech LLC">
+                </div>
+                <button type="submit" class="btn-primary"
+                    style="background: linear-gradient(135deg, var(--accent), var(--secondary)); width: 100%;">Add
+                    Supplier</button>
+            </form>
+
+            <ul style="list-style: none;">
+                {% for supplier in suppliers %}
+                <li
+                    style="padding: 1rem; border-bottom: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-weight: 500;">{{ supplier.name }}</span>
+                    <span style="font-size: 0.8rem; color: var(--text-secondary);">ID: {{ supplier.id }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

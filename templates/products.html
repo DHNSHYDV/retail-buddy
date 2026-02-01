@@ -1,0 +1,54 @@
+{% extends "layout.html" %}
+
+{% block title %}Inventory & Products{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h2 class="section-title" style="margin-bottom: 0;">Product List</h2>
+        <a href="{{ url_for('add_product') }}" class="btn-primary" style="text-decoration: none;">Add Product</a>
+        <!-- Note: Add button is visual only for now, can be implemented later -->
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>SKU</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Supplier</th>
+                <th class="text-right">Price</th>
+                <th class="text-right">Stock</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+            <tr>
+                <td style="font-family: monospace; color: var(--text-secondary);">{{ product.sku }}</td>
+                <td style="font-weight: 600;">{{ product.name }}</td>
+                <td><span class="badge neutral">{{ product.category_name }}</span></td>
+                <td>{{ product.supplier_name }}</td>
+                <td class="text-right">${{ "%.2f"|format(product.price) }}</td>
+                <td class="text-right 
+                    {% if product.stock_quantity < 20 %}
+                        {% if product.stock_quantity == 0 %}
+                            stock-out
+                        {% else %}
+                            stock-low
+                        {% endif %}
+                    {% endif %}
+                ">
+                    {% if product.stock_quantity == 0 %}
+                    <span class="badge danger">Out of Stock</span>
+                    {% elif product.stock_quantity < 20 %} <span class="badge warning">{{ product.stock_quantity
+                        }}</span>
+                        {% else %}
+                        <span class="badge success">{{ product.stock_quantity }}</span>
+                        {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

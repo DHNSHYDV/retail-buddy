@@ -1,0 +1,89 @@
+{% extends "layout.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="stats-grid">
+    <div class="card">
+        <h3>Total Revenue</h3>
+        <p class="value">${{ "%.2f"|format(revenue) }}</p>
+    </div>
+    <div class="card">
+        <h3>Total Orders</h3>
+        <p class="value">{{ orders_count }}</p>
+    </div>
+    <div class="card">
+        <h3>Low Stock Alerts</h3>
+        <p class="value" style="color: {% if low_stock_count > 0 %}var(--danger){% else %}var(--success){% endif %}">
+            {{ low_stock_count }}
+        </p>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
+    <!-- Recent Orders Section -->
+    <div>
+        <h2 class="section-title">Recent Orders</h2>
+        <div class="card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Customer</th>
+                        <th>Status</th>
+                        <th class="text-right">Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in recent_orders %}
+                    <tr>
+                        <td>#{{ order.id }}</td>
+                        <td>{{ order.customer_name }}</td>
+                        <td>
+                            <span class="badge 
+                                {% if order.status == 'Completed' %}success
+                                {% elif order.status == 'Pending' %}warning
+                                {% else %}danger{% endif %}">
+                                {{ order.status }}
+                            </span>
+                        </td>
+                        <td class="text-right">${{ "%.2f"|format(order.total_amount) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Low Stock Section -->
+    <div>
+        <h2 class="section-title">Restock Needed</h2>
+        <div class="card">
+            {% if low_stock_items %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th class="text-right">Qty</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in low_stock_items %}
+                    <tr>
+                        <td>{{ item.name }}</td>
+                        <td class="text-right" style="color: var(--danger); font-weight: bold;">
+                            {{ item.stock_quantity }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p style="color: var(--text-secondary); text-align: center; padding: 1rem;">
+                All items are well stocked!
+            </p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

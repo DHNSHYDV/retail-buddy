@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retail-Buddy</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <!-- Premium Fonts: Outfit (Headings) & Inter (Body) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700;800&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="sidebar">
+        <a href="/" class="brand">✨ Retail-Buddy</a>
+        <ul class="nav-links">
+            <li><a href="/dashboard" class="{% if 'dashboard' in request.path %}active{% endif %}">Dashboard</a></li>
+            <li><a href="/products" class="{% if 'products' in request.path %}active{% endif %}">Inventory</a></li>
+            <li><a href="/customers" class="{% if 'customers' in request.path %}active{% endif %}">Customers</a></li>
+            <li><a href="/orders" class="{% if 'orders' in request.path %}active{% endif %}">Sales & Orders</a></li>
+            <li><a href="/management" class="{% if 'management' in request.path %}active{% endif %}"
+                    style="margin-top: 1rem; border-top: 1px solid var(--glass-border); padding-top: 1rem;">Manage
+                    Data</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <header>
+            <h1>{% block title %}Overview{% endblock %}</h1>
+            <div style="display: flex; gap: 1rem; align-items: center;">
+                <span style="color: var(--text-secondary);">Hello, <b>{{ session['username'] }}</b></span>
+                <a href="/logout" class="badge danger" style="text-decoration: none;">Logout</a>
+            </div>
+        </header>
+
+        {% block content %}{% endblock %}
+    </div>
+</body>
+
+</html>
