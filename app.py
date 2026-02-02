@@ -330,5 +330,104 @@ def add_supplier():
     
     return redirect(url_for('management'))
 
+@app.route('/edit_product/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit_product(id):
+    conn = get_db()
+    cursor = conn.cursor()
+    user_id = session['user_id']
+    
+    # Check if product belongs to user
+    cursor.execute("SELECT * FROM products WHERE id = ? AND user_id = ?", (id, user_id))
+    product = cursor.fetchone()
+    
+    if not product:
+        return "Product not found or access denied."
+        
+    if request.method == 'POST':
+        name = request.form['name']
+        sku = request.form['sku']
+        price = float(request.form['price'])
+        stock = int(request.form['stock_quantity'])
+        category_id = request.form['category_id'] or None
+        supplier_id = request.form['supplier_id'] or None
+        description = request.form['description']
+        
+        try:
+            cursor.execute("""
+                UPDATE products 
+                SET name = ?, sku = ?, price = ?, stock_quantity = ?, description = ?, category_id = ?, supplier_id = ?
+                WHERE id = ? AND user_id = ?
+            """, (name, sku, price, stock, description, category_id, supplier_id, id, user_id))
+            conn.commit()
+            return redirect(url_for('products'))
+        except sqlite3.Error as e:
+            error = f"Database Error: {e}"
+            
+    # Load categories and suppliers for dropdown
+    cursor.execute("SELECT id, name FROM categories WHERE user_id = ?", (user_id,))
+    categories = cursor.fetchall()
+    
+    cursor.execute("SELECT id, name FROM suppliers WHERE user_id = ?", (user_id,))
+    suppliers = cursor.fetchall()
+    
+    return render_template('add_product.html', product=product, categories=categories, suppliers=suppliers, error=locals().get('error'))
+
+@app.route('/delete_product/<int:id>', methods=['POST'])
+@login_required
+def delete_product(id):
+    conn = get_db()
+    cursor = conn.cursor()
+    user_id = session['user_id']
+    
+    cursor.execute("DELETE FROM products WHERE id = ? AND user_id = ?", (id, user_id))
+    conn.commit()
+    return redirect(url_for('products'))
+
+@app.route('/edit_customer/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit_customer(id):
+    conn = get_db()
+    cursor = conn.cursor()
+    user_id = session['user_id']
+    
+    # Check if customer belongs to user
+    cursor.execute("SELECT * FROM customers WHERE id = ? AND user_id = ?", (id, user_id))
+    customer = cursor.fetchone()
+    
+    if not customer:
+        return "Customer not found or access denied."
+        
+    if request.method == 'POST':
+        name = request.form['name']
+        email = request.form['email']
+        phone = request.form['phone']
+        status = request.form['status']
+        
+        try:
+            cursor.execute("""
+                UPDATE customers 
+                SET name = ?, email = ?, phone = ?, status = ?
+                WHERE id = ? AND user_id = ?
+            """, (name, email, phone, status, id, user_id))
+            conn.commit()
+            return redirect(url_for('customers'))
+        except sqlite3.Error as e:
+            error = f"Database Error: {e}"
+            return render_template('add_customer.html', customer=customer, error=error)
+            
+    return render_template('add_customer.html', customer=customer)
+
+@app.route('/delete_customer/<int:id>', methods=['POST'])
+@login_required
+def delete_customer(id):
+    conn = get_db()
+    cursor = conn.cursor()
+    user_id = session['user_id']
+    
+    cursor.execute("DELETE FROM customers WHERE id = ? AND user_id = ?", (id, user_id))
+    conn.commit()
+    return redirect(url_for('customers'))
+
 if __name__ == '__main__':
     app.run(debug=True, port=8000)
