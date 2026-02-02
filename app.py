@@ -1,11 +1,15 @@
 from flask import Flask, render_template, request, redirect, url_for, g, session, flash
 import sqlite3
+import os
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 
 app = Flask(__name__)
 app.secret_key = 'dev-secret-key' # Change this for production!
-DB_FILE = "bizflow.db"
+
+# Use absolute path for database to avoid "Table not found" or "Database locked" errors on deployment
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DB_FILE = os.path.join(BASE_DIR, "bizflow.db")
 
 def get_db():
     db = getattr(g, '_database', None)
